@@ -1,0 +1,27 @@
+.settings/*
+.buildpath
+.project
+.idea
+.DS_Store
+node_modules
+cache/
+vendor/
+generated/
+phpunit.phar
+composer.phar
+web/packed/
+web/static/
+atlas-release.tar.gz
+logs/
+tmp/
+environments/*-env*
+resources/*/solr/*/data
+docker/archive.tar.gz
+build/
+# SASS
+npm-debug.log
+plugins/olxmena-atlas-web/static/css/maps/
+
+# webpack bundles
+#plugins/olxmena-atlas-web/static/js/react/dist/
+package-lock.json

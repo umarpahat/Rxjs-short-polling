@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RxJS Demo</title>
+    <style>
+        body {
+            font: 16px Helvetica, sans-serif;
+            color: #333;
+        }
+
+        button {
+            width: 70px;
+            padding: 5px;
+            font-size: 16px;
+            line-height: 20px;
+            border-radius: 6px;
+            display: inline-block;
+            outline: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #f2f2f2;
+        }
+
+        span {
+            margin-right: 15px;
+            display: inline-block;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 100px auto;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h3>Would you like to short polling in RxJS?</h3>
+    <div>
+        <button type="button" name="yesCheckbox" id="yesCheckbox">Yes</button>
+        <span id="totalVotesYes"></span>
+        <button type="button" name="noCheckbox" id="noCheckbox">No</button>
+        <span id="totalVotesNo"></span>
+    </div>
+</div>
+<script src="rxjs.umd.js"></script>
+<script>
+    let Rx = window['rxjs'];
+    const {fromEvent, of} = Rx;
+    const {ajax} = Rx.ajax;
+    let {switchMap, catchError, mapTo, tap, map} = Rx.operators;
+    let countNo = localStorage.no || 0;
+    let countYes = localStorage.yes || 0;
+    const data$ = ajax.get('short-polling.json').pipe(
+        switchMap(response => {
+                if (response.status === 200) {
+                    console.log(response)
+                    return of(response)
+                }
+            }
+        ),
+        catchError(err => {
+            console.error(err);
+            return of({error: true, message: err.message})
+        })
+    );
+    data$.subscribe(d => {
+            document.querySelector('#totalVotesYes').innerHTML = countYes;
+            document.querySelector('#totalVotesNo').innerHTML = countNo;
+        }
+    );
+    const pollingStatusYes = document.getElementById('totalVotesYes');
+    const yesCheckboxClick$ = fromEvent(yesCheckbox, 'click')
+
+        .pipe(
+            mapTo('yes'),
+            tap(_ => pollingStatusYes.innerHTML = ++countYes),
+            map(function () {
+                localStorage.setItem('yes', countYes)
+                return {countYes};
+            }),
+        )
+        .subscribe();
+
+    const pollingStatusNo = document.getElementById('totalVotesNo');
+    const noCheckboxClick$ = fromEvent(noCheckbox, 'click')
+        .pipe(
+            mapTo('no'),
+            tap(_ => pollingStatusNo.innerHTML = ++countNo),
+            map(function () {
+                localStorage.setItem('no', countNo)
+                return {countNo};
+            }),
+        )
+        .subscribe();
+</script>
+</body>
+</html>

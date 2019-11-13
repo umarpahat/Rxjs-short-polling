@@ -1,0 +1,21 @@
+{
+  "name": "rxjs-short-polling",
+  "version": "1.0.0",
+  "description": "",
+  "main": "rxjs.umd.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bridge": "^0.2.7",
+    "fs": "0.0.1-security",
+    "requirejs-babel": "0.0.9",
+    "rxjs": "^6.5.3"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.0",
+    "@babel/core": "^7.7.2"
+  }
+}
