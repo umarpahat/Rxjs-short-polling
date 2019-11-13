@@ -1,0 +1,5 @@
+git clone 
+cd Rxjs-short-polling
+npm install
+npm install http-server -g
+http-server
